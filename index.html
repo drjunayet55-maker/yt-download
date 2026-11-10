@@ -62,8 +62,8 @@ iframe{
       allowfullscreen>
     </iframe>
 
-    <button onclick="openVideo()">Open Video</button>
-  </div>
+<button onclick="openVideo()">Open Video</button>
+<button onclick="downloadVideo()">Download Video</button>  </div>
 
   <p id="msg"></p>
 </div>
@@ -156,7 +156,11 @@ function openVideo(){
   if(videoURL){
     window.open(videoURL, "_blank", "noopener");
   }
-}
+function downloadVideo(){
+  if(videoURL){
+    window.open(videoURL, "_blank", "noopener");
+  }
+}}
 </script>
 </body>
 </html>
