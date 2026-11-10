@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<title>YT DOWNLOAD</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101010;color:white;font-family:Arial,sans-serif;text-align:center;padding:25px 16px}
+.logo{font-size:35px;font-weight:bold;color:#ff3030;margin-top:35px}
+h1{font-size:27px}
+p{color:#bbb}
+.card{max-width:450px;margin:25px auto;background:#202020;padding:22px;border-radius:18px}
+input{width:100%;padding:15px;border:1px solid #555;border-radius:10px;background:#111;color:white;font-size:15px}
+button{width:100%;padding:14px;margin-top:12px;border:0;border-radius:10px;background:#ff3030;color:white;font-size:16px;font-weight:bold}
+button:active{opacity:.8}
+img{width:100%;margin-top:20px;border-radius:12px}
+iframe{width:100%;aspect-ratio:16/9;margin-top:20px;border:0;border-radius:12px}
+a{color:#ff5555}
+#result{display:none}
+.note{font-size:13px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="logo">▶ YT</div>
+<h1>YT DOWNLOAD</h1>
+<p>YouTube Video Preview</p>
+
+<div class="card">
+<input id="url" type="url" placeholder="Paste YouTube video link">
+<button onclick="preview()">Preview Video</button>
+<div id="result">
+<img id="thumb" alt="Video thumbnail">
+<iframe id="player" allowfullscreen
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+</iframe>
+<button onclick="openYoutube()">Open in YouTube</button>
+</div>
+<p id="msg"></p>
+</div>
+
+<p class="note">This app previews YouTube videos. Download videos using YouTube's official download options or YouTube Studio for your own uploads.</p>
+
+<script>
+let videoId="";
+function preview(){
+const input=document.getElementById("url").value.trim();
+const msg=document.getElementById("msg");
+const result=document.getElementById("result");
+let id="";
+try{
+const u=new URL(input);
+if(u.hostname==="youtu.be" || u.hostname.endsWith(".youtu.be")){
+id=u.pathname.split("/").filter(Boolean)[0]||"";
+}else if(u.hostname==="youtube.com" || u.hostname.endsWith(".youtube.com")){
+if(u.pathname==="/watch") id=u.searchParams.get("v")||"";
+else if(/^\/(shorts|embed)\/[^/]+/.test(u.pathname)) id=u.pathname.split("/")[2]||"";
+}
+}catch(e){}
+if(!/^[a-zA-Z0-9_-]{11}$/.test(id)){
+msg.textContent="Please enter a valid YouTube video link.";
+result.style.display="none";
+return;
+}
+videoId=id;
+document.getElementById("thumb").src="https://i.ytimg.com/vi/"+id+"/hqdefault.jpg";
+document.getElementById("player").src="https://www.youtube-nocookie.com/embed/"+id;
+result.style.display="block";
+msg.textContent="";
+}
+function openYoutube(){
+if(videoId) window.open("https://www.youtube.com/watch?v="+videoId,"_blank");
+}
+</script>
+</body>
+</html>
