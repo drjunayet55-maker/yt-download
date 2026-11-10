@@ -53,6 +53,7 @@ iframe{
 
   <div id="result">
     <h3 id="platform"></h3>
+
     <iframe id="ytplayer" style="display:none"
       allowfullscreen
       allow="accelerometer; autoplay; encrypted-media; picture-in-picture">
@@ -62,15 +63,15 @@ iframe{
       allowfullscreen>
     </iframe>
 
-<button onclick="openVideo()">Open Video</button>
-<button onclick="downloadVideo()">Download Video</button>  </div>
+    <button onclick="openVideo()">Open Video</button>
+    <button onclick="downloadVideo()">Download Video</button>
+  </div>
 
   <p id="msg"></p>
 </div>
 
 <p class="note">
-This app previews supported YouTube and TikTok links.
-Use each platform's official download options where available.
+Preview supported links and use official download options where available.
 </p>
 
 <script>
@@ -109,7 +110,9 @@ function preview(){
 
   const isTikTok =
     host === "tiktok.com" ||
-    host.endsWith(".tiktok.com");
+    host.endsWith(".tiktok.com") ||
+    host === "vt.tiktok.com" ||
+    host === "vm.tiktok.com";
 
   if(isYouTube){
     let id = "";
@@ -134,15 +137,15 @@ function preview(){
   } else if(isTikTok){
     const match = u.pathname.match(/\/video\/(\d+)/);
 
-    if(!match){
+    if(match){
+      platform.textContent = "TikTok Preview";
+      tt.src = "https://www.tiktok.com/embed/v2/" + match[1];
+      tt.style.display = "block";
+    } else {
+      platform.textContent = "TikTok Link";
       msg.textContent =
-        "This TikTok link format is not supported for preview. Try the full video link.";
-      return;
+        "This is a short TikTok link. Open TikTok to view the video.";
     }
-
-    platform.textContent = "TikTok Preview";
-    tt.src = "https://www.tiktok.com/embed/v2/" + match[1];
-    tt.style.display = "block";
 
   } else {
     msg.textContent = "This website is not supported yet.";
@@ -156,11 +159,13 @@ function openVideo(){
   if(videoURL){
     window.open(videoURL, "_blank", "noopener");
   }
+}
+
 function downloadVideo(){
   if(videoURL){
     window.open(videoURL, "_blank", "noopener");
   }
-}}
+}
 </script>
 </body>
 </html>
